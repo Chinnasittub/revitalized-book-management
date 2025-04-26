@@ -1,0 +1,8 @@
+# filepath: ..:\BookManagement\BookManagementPrj\.gitignore
+bin/
+obj/
+*.user
+*.suo
+*.log
+*.vs/
+.vscode/

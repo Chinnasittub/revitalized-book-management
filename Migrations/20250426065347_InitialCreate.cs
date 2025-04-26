@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -21,6 +22,20 @@ namespace BookManagementPrj.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.CategoryID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tokens",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TokenValue = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Expiration = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tokens", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -72,6 +87,9 @@ namespace BookManagementPrj.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Books");
+
+            migrationBuilder.DropTable(
+                name: "Tokens");
 
             migrationBuilder.DropTable(
                 name: "Users");

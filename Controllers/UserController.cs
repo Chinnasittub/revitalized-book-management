@@ -116,7 +116,7 @@ namespace BookManagementPrj.Controllers
         {
             try
             {
-                var user = await db.Users.FirstOrDefaultAsync(u => u.Username == "testuser");
+                var user = await db.Users.FirstOrDefaultAsync(u => u.Username == "testLoginUser");
                 if (user == null) return NotFound("Test user not found.");
                 db.Users.Remove(user);
                 await db.SaveChangesAsync();

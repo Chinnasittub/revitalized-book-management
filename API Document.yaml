@@ -1,0 +1,364 @@
+openapi: 3.0.4
+info:
+  title: BookManagementAPI
+  description: This is Technical Assessment Question.
+  version: v1
+paths:
+  /api/Auth/login:
+    post:
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UserDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UserDto'
+      responses:
+        '200':
+          description: OK
+  /api/Auth/logout:
+    post:
+      tags:
+        - Auth
+      responses:
+        '200':
+          description: OK
+  /api/Book:
+    post:
+      tags:
+        - Book
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '200':
+          description: OK
+    get:
+      tags:
+        - Book
+      responses:
+        '200':
+          description: OK
+  /api/Book/{id}:
+    get:
+      tags:
+        - Book
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+    put:
+      tags:
+        - Book
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '200':
+          description: OK
+    delete:
+      tags:
+        - Book
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+  /api/Book/max-id:
+    get:
+      tags:
+        - Book
+      responses:
+        '200':
+          description: OK
+  /api/Category:
+    post:
+      tags:
+        - Category
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/Category'
+      responses:
+        '200':
+          description: OK
+    get:
+      tags:
+        - Category
+      responses:
+        '200':
+          description: OK
+  /api/Category/{id}:
+    get:
+      tags:
+        - Category
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+    put:
+      tags:
+        - Category
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/Category'
+      responses:
+        '200':
+          description: OK
+    delete:
+      tags:
+        - Category
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+  /api/Category/max-id:
+    get:
+      tags:
+        - Category
+      responses:
+        '200':
+          description: OK
+  /api/User:
+    post:
+      tags:
+        - User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: OK
+    get:
+      tags:
+        - User
+      responses:
+        '200':
+          description: OK
+  /api/User/{id}:
+    get:
+      tags:
+        - User
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+    put:
+      tags:
+        - User
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: OK
+    delete:
+      tags:
+        - User
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+  /api/User/max-id:
+    get:
+      tags:
+        - User
+      responses:
+        '200':
+          description: OK
+  /api/User/remove-test-user:
+    delete:
+      tags:
+        - User
+      responses:
+        '200':
+          description: OK
+components:
+  schemas:
+    Book:
+      required:
+        - title
+      type: object
+      properties:
+        bookId:
+          type: integer
+          format: int32
+        title:
+          minLength: 1
+          type: string
+        author:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        price:
+          type: number
+          format: double
+        categoryId:
+          type: integer
+          format: int32
+        category:
+          $ref: '#/components/schemas/Category'
+      additionalProperties: false
+    Category:
+      required:
+        - categoryName
+      type: object
+      properties:
+        categoryID:
+          type: integer
+          format: int32
+        categoryName:
+          minLength: 1
+          type: string
+      additionalProperties: false
+    User:
+      required:
+        - password
+        - username
+      type: object
+      properties:
+        userID:
+          type: integer
+          format: int32
+        username:
+          minLength: 1
+          type: string
+        password:
+          minLength: 1
+          type: string
+        email:
+          type: string
+          nullable: true
+      additionalProperties: false
+    UserDto:
+      type: object
+      properties:
+        username:
+          type: string
+          nullable: true
+        password:
+          type: string
+          nullable: true
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: http
+      description: |-
+        Enter your token in the text input below.
+
+        Example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+      scheme: Bearer
+      bearerFormat: JWT
+security:
+  - Bearer: []

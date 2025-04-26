@@ -1,3 +1,4 @@
+using BookManagementPrj.Data;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -11,7 +12,15 @@ builder.Services.AddDbContext<BookManagementContext>(o => o.UseSqlServer(builder
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo 
+    { 
+        Title = "BookManagementAPI", 
+        Version = "v1",
+        Description = "This is Technical Assessment Question." 
+    });
+});
 
 var app = builder.Build();
 
@@ -25,6 +34,16 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.Lifetime.ApplicationStarted.Register(() =>
+{
+    Console.WriteLine("Application has started.");
+});
+
+app.Lifetime.ApplicationStopped.Register(() =>
+{
+    Console.WriteLine("Application is stopping.");
+});
 
 app.MapControllers();
 

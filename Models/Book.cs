@@ -8,8 +8,8 @@ namespace BookManagementPrj.Models
         public int BookId { get; set; }
         [Required]
         public string Title { get; set; }
-        public string Author { get; set; }
-        public string Description { get; set; }
+        public string Author { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
         public decimal Price { get; set; }
 
         [ForeignKey("Category")]

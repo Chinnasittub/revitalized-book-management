@@ -1,0 +1,1463 @@
+{
+	"info": {
+		"_postman_id": "e774cd4f-6668-4ac8-89b0-4f7fd7bef1ec",
+		"name": "BookManagemenAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "35050382",
+		"_collection_link": "https://galactic-zodiac-302469.postman.co/workspace/GM-Wonderful-Workspace~1c1cf394-1fdc-4ee4-876e-43b93fa0c38a/collection/35050382-e774cd4f-6668-4ac8-89b0-4f7fd7bef1ec?action=share&source=collection_link&creator=35050382"
+	},
+	"item": [
+		{
+			"name": "UserController",
+			"item": [
+				{
+					"name": "Add",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const NOW = new Date();\r",
+									"\r",
+									"const YEAR = NOW.getFullYear();\r",
+									"const MONTH = String(NOW.getMonth() + 1).padStart(2, '0');\r",
+									"const DAY = String(NOW.getDate()).padStart(2, '0');\r",
+									"const HOUR = String(NOW.getHours()).padStart(2, '0');\r",
+									"const MINUTE = String(NOW.getMinutes()).padStart(2, '0');\r",
+									"const SECOND = String(NOW.getSeconds()).padStart(2, '0');\r",
+									"\r",
+									"const TIMESTAMP = `${YEAR}${MONTH}${DAY}${HOUR}${MINUTE}${SECOND}`;\r",
+									"\r",
+									"pm.environment.set(\"randomusername\", `user${TIMESTAMP}`);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"{{randomusername}}\",\n  \"password\": \"1111\",\n  \"email\": \"test@mail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{bookManagementUrl}}/api/User",
+							"host": [
+								"{{bookManagementUrl}}"
+							],
+							"path": [
+								"api",
+								"User"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{bookManagementUrl}}/api/User",
+							"host": [
+								"{{bookManagementUrl}}"
+							],
+							"path": [
+								"api",
+								"User"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get max id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var responseData = pm.response.text();\r",
+									"\r",
+									"if (responseData != \"No users found.\") {\r",
+									"    pm.collectionVariables.set(\"maxUserID\", responseData);\r",
+									"    console.log(\"Set maxUserID to:\", responseData);\r",
+									"} else {\r",
+									"    console.log(\"Response is not an integer:\", responseData);\r",
+									"}\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{bookManagementUrl}}/api/User/max-id",
+							"host": [
+								"{{bookManagementUrl}}"
+							],
+							"path": [
+								"api",
+								"User",
+								"max-id"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get by Id",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// const bookManagementUrl = pm.environment.get('bookManagementUrl');\r",
+									"// pm.sendRequest(bookManagementUrl + '/api/User/max-id', function (err, res) {\r",
+									"//     if (err) {\r",
+									"//         console.log(err);\r",
+									"//     } else {\r",
+									"//         const userId = res.json();\r",
+									"//         pm.environment.set(\"userid\", userId);\r",
+									"//     }\r",
+									"// });\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{bookManagementUrl}}/api/User/{{maxUserID}}",
+							"host": [
+								"{{bookManagementUrl}}"
+							],
+							"path": [
+								"api",
+								"User",
+								"{{maxUserID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const bookManagementUrl = pm.environment.get('bookManagementUrl');\r",
+									"var maxID = pm.collectionVariables.get(\"maxUserID\");\r",
+									"\r",
+									"// Get user by ID\r",
+									"const stringUrl = `${bookManagementUrl}/api/User/${maxID}`;\r",
+									"pm.sendRequest(stringUrl, function (err2, res2) {\r",
+									"    if (err2) {\r",
+									"        console.log(\"Error fetching by ID:\", err2);\r",
+									"        return;\r",
+									"    }\r",
+									"\r",
+									"    const user = res2.json();\r",
+									"\r",
+									"    // Set modified values\r",
+									"    pm.environment.set(\"modifiedUsername\", \"Updated \" + user.username);\r",
+									"    pm.environment.set(\"modifiedPassword\", \"password\");\r",
+									"    pm.environment.set(\"modifiedRole\", \"Update \" + user.email);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"{{modifiedUsername}}\",\n  \"password\": \"{{modifiedPassword}}\",\n  \"email\": \"{{modifiedRole}}\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{bookManagementUrl}}/api/User/{{maxUserID}}",
+							"host": [
+								"{{bookManagementUrl}}"
+							],
+							"path": [
+								"api",
+								"User",
+								"{{maxUserID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.expect(pm.response.status).to.equal(\"OK\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{bookManagementUrl}}/api/User/{{maxUserID}}",
+							"host": [
+								"{{bookManagementUrl}}"
+							],
+							"path": [
+								"api",
+								"User",
+								"{{maxUserID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CategoryController",
+			"item": [
+				{
+					"name": "Add",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const NOW = new Date();\r",
+									"\r",
+									"const YEAR = NOW.getFullYear();\r",
+									"const MONTH = String(NOW.getMonth() + 1).padStart(2, '0');\r",
+									"const DAY = String(NOW.getDate()).padStart(2, '0');\r",
+									"const HOUR = String(NOW.getHours()).padStart(2, '0');\r",
+									"const MINUTE = String(NOW.getMinutes()).padStart(2, '0');\r",
+									"const SECOND = String(NOW.getSeconds()).padStart(2, '0');\r",
+									"\r",
+									"const TIMESTAMP = `${YEAR}${MONTH}${DAY}${HOUR}${MINUTE}${SECOND}`;\r",
+									"\r",
+									"pm.environment.set(\"randomcategory\", `category${TIMESTAMP}`);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"categoryname\": \"{{randomcategory}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{bookManagementUrl}}/api/Category",
+							"host": [
+								"{{bookManagementUrl}}"
+							],
+							"path": [
+								"api",
+								"Category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{bookManagementUrl}}/api/Category",
+							"host": [
+								"{{bookManagementUrl}}"
+							],
+							"path": [
+								"api",
+								"Category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get max id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var responseData = pm.response.text();\r",
+									"\r",
+									"if (responseData != \"No categories found.\") {\r",
+									"    pm.collectionVariables.set(\"maxCategoryID\", responseData);\r",
+									"    console.log(\"Set maxID to:\", responseData);\r",
+									"} else {\r",
+									"    console.log(\"Response is not an integer:\", responseData);\r",
+									"}\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{bookManagementUrl}}/api/Category/max-id",
+							"host": [
+								"{{bookManagementUrl}}"
+							],
+							"path": [
+								"api",
+								"Category",
+								"max-id"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get by Id",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{bookManagementUrl}}/api/Category/{{maxCategoryID}}",
+							"host": [
+								"{{bookManagementUrl}}"
+							],
+							"path": [
+								"api",
+								"Category",
+								"{{maxCategoryID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const bookManagementUrl = pm.environment.get('bookManagementUrl');\r",
+									"var maxID = pm.collectionVariables.get(\"maxCategoryID\");\r",
+									"\r",
+									"console.log(\"category id: \" + maxID);\r",
+									"\r",
+									"const stringUrl = `${bookManagementUrl}/api/Category/${maxID}`;\r",
+									"pm.sendRequest(stringUrl, function (err2, res2) {\r",
+									"    if (err2) {\r",
+									"        console.log(\"Error fetching by ID:\", err2);\r",
+									"        return;\r",
+									"    }\r",
+									"\r",
+									"    const category = res2.json();\r",
+									"    console.log(\"category\" + category)\r",
+									"    console.log(\"categoryid\" + category.categoryID)\r",
+									"    console.log(\"categoryname\" + category.categoryName)\r",
+									"    // Set modified values\r",
+									"    pm.environment.set(\"modifiedCategoryname\", \"Updated \" + category.categoryName);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"categoryname\": \"{{modifiedCategoryname}}\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{bookManagementUrl}}/api/Category/{{maxCategoryID}}",
+							"host": [
+								"{{bookManagementUrl}}"
+							],
+							"path": [
+								"api",
+								"Category",
+								"{{maxCategoryID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{bookManagementUrl}}/api/Category/{{maxCategoryID}}",
+							"host": [
+								"{{bookManagementUrl}}"
+							],
+							"path": [
+								"api",
+								"Category",
+								"{{maxCategoryID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "BookController",
+			"item": [
+				{
+					"name": "Get category max id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var responseData = pm.response.text();\r",
+									"\r",
+									"if (responseData != \"No categories found.\") {\r",
+									"    pm.collectionVariables.set(\"categoryId\", responseData);\r",
+									"    console.log(\"Set maxID to:\", responseData);\r",
+									"} else {\r",
+									"    console.log(\"Response is not an integer:\", responseData);\r",
+									"}\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{bookManagementUrl}}/api/Category/max-id",
+							"host": [
+								"{{bookManagementUrl}}"
+							],
+							"path": [
+								"api",
+								"Category",
+								"max-id"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const NOW = new Date();\r",
+									"\r",
+									"const YEAR = NOW.getFullYear();\r",
+									"const MONTH = String(NOW.getMonth() + 1).padStart(2, '0');\r",
+									"const DAY = String(NOW.getDate()).padStart(2, '0');\r",
+									"const HOUR = String(NOW.getHours()).padStart(2, '0');\r",
+									"const MINUTE = String(NOW.getMinutes()).padStart(2, '0');\r",
+									"const SECOND = String(NOW.getSeconds()).padStart(2, '0');\r",
+									"\r",
+									"const TIMESTAMP = `${YEAR}${MONTH}${DAY}${HOUR}${MINUTE}${SECOND}`;\r",
+									"\r",
+									"pm.environment.set(\"randomtitle\", `book${TIMESTAMP}`);\r",
+									"\r",
+									"const min = 180;\r",
+									"const max = 390;\r",
+									"const randomNumber = Math.floor(Math.random() * (max - min + 1) + min);\r",
+									"\r",
+									"pm.environment.set(\"randomprice\", randomNumber);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"{{randomtitle}}\",\n  \"author\": \"testAuther\",\n  \"description\": \"description\",\n  \"price\": {{randomprice}},\n  \"categoryId\": {{categoryId}}\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{bookManagementUrl}}/api/Book",
+							"host": [
+								"{{bookManagementUrl}}"
+							],
+							"path": [
+								"api",
+								"Book"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{bookManagementUrl}}/api/Book",
+							"host": [
+								"{{bookManagementUrl}}"
+							],
+							"path": [
+								"api",
+								"Book"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get max id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var responseData = pm.response.text();\r",
+									"\r",
+									"if (responseData != \"No books found.\") {\r",
+									"    pm.collectionVariables.set(\"maxBookID\", responseData);\r",
+									"    console.log(\"Set maxID to:\", responseData);\r",
+									"} else {\r",
+									"    console.log(\"Response is not an integer:\", responseData);\r",
+									"}\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{bookManagementUrl}}/api/Book/max-id",
+							"host": [
+								"{{bookManagementUrl}}"
+							],
+							"path": [
+								"api",
+								"Book",
+								"max-id"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get by Id",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{bookManagementUrl}}/api/Book/{{maxBookID}}",
+							"host": [
+								"{{bookManagementUrl}}"
+							],
+							"path": [
+								"api",
+								"Book",
+								"{{maxBookID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const bookManagementUrl = pm.environment.get('bookManagementUrl');\r",
+									"var maxID = pm.collectionVariables.get(\"maxBookID\");\r",
+									"\r",
+									"const userUrl = `${bookManagementUrl}/api/Book/${maxID}`;\r",
+									"    pm.sendRequest(userUrl, function (err2, res2) {\r",
+									"        if (err2) {\r",
+									"            console.log(\"Error fetching book by ID:\", err2);\r",
+									"            return;\r",
+									"        }\r",
+									"\r",
+									"        const book = res2.json();\r",
+									"\r",
+									"        // Set modified values\r",
+									"        pm.environment.set(\"modifiedTitle\", \"Updated \" + book.title);\r",
+									"    });\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"{{modifiedTitle}}\",\n    \"author\": \"testAuther\",\n    \"description\": \"description\",\n    \"price\": 111,\n    \"categoryId\": {{categoryId}}\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{bookManagementUrl}}/api/Book/{{maxBookID}}",
+							"host": [
+								"{{bookManagementUrl}}"
+							],
+							"path": [
+								"api",
+								"Book",
+								"{{maxBookID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{bookManagementUrl}}/api/Book/{{maxBookID}}",
+							"host": [
+								"{{bookManagementUrl}}"
+							],
+							"path": [
+								"api",
+								"Book",
+								"{{maxBookID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "AuthController",
+			"item": [
+				{
+					"name": "Add test login user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {\r",
+									"    console.log(\"✅ Create test user successful!\");\r",
+									"} else {\r",
+									"    console.log(\"❌ Create user failed. Status code:\", pm.response.code);\r",
+									"}\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"testLoginUser\",\n  \"password\": \"password\",\n  \"email\": \"test@email.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{bookManagementUrl}}/api/User",
+							"host": [
+								"{{bookManagementUrl}}"
+							],
+							"path": [
+								"api",
+								"User"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// var responseJson = pm.response.json();\r",
+									"// pm.collectionVariables.set(\"authToken\", responseJson.token);\r",
+									"\r",
+									"// if (pm.response.code === 200 || pm.response.code === 204) {\r",
+									"//     console.log(\"Token saved: \" + pm.collectionVariables.get(\"authToken\"));\r",
+									"//     console.log(\"✅ Login successful!\");\r",
+									"// } else {\r",
+									"//     console.log(\"❌ Logout may have failed. Status code:\", pm.response.code);\r",
+									"// }\r",
+									"\r",
+									"// pm.test(\"Logout successful\", function() {\r",
+									"//     pm.expect(pm.response.code).to.equal(200);\r",
+									"// });\r",
+									"\r",
+									"// pm.test(\"Token is received\", function() {\r",
+									"//     pm.expect(responseJson.token).to.exist;\r",
+									"// });\r",
+									"\r",
+									"// ตรวจสอบการตอบสนอง\r",
+									"if (pm.response && pm.response.code) {\r",
+									"    // บันทึกข้อมูล response สำหรับการตรวจสอบ\r",
+									"    console.log(\"Response received:\", pm.response.code);\r",
+									"    \r",
+									"    if (pm.response.code === 200) {\r",
+									"        // พยายามแยกวิเคราะห์ response body\r",
+									"        try {\r",
+									"            var responseJson = pm.response.json();\r",
+									"            \r",
+									"            // ตรวจสอบว่ามี token หรือไม่\r",
+									"            if (responseJson && responseJson.token) {\r",
+									"                // บันทึก token\r",
+									"                pm.collectionVariables.set(\"authToken\", responseJson.token);\r",
+									"                console.log(\"✅ Login successful! Token saved:\", responseJson.token.substring(0, 10) + \"...\");\r",
+									"                \r",
+									"                pm.test(\"Login successful with valid token\", function() {\r",
+									"                    pm.expect(responseJson.token).to.be.a('string');\r",
+									"                    pm.expect(responseJson.token.length).to.be.greaterThan(10);\r",
+									"                });\r",
+									"            } else {\r",
+									"                console.log(\"❌ Token not found in response\");\r",
+									"                pm.test(\"Token should be in response\", function() {\r",
+									"                    pm.expect.fail(\"Token not found in response body\");\r",
+									"                });\r",
+									"            }\r",
+									"        } catch (e) {\r",
+									"            console.log(\"❌ Error parsing response:\", e.message);\r",
+									"            pm.test(\"Response should be valid JSON with token\", function() {\r",
+									"                pm.expect.fail(\"Failed to parse response: \" + e.message);\r",
+									"            });\r",
+									"        }\r",
+									"    } else if (pm.response.code === 401) {\r",
+									"        console.log(\"❌ Login failed: Unauthorized\");\r",
+									"        pm.test(\"Login should be successful\", function() {\r",
+									"            pm.expect.fail(\"Authentication failed with 401 Unauthorized\");\r",
+									"        });\r",
+									"    } else {\r",
+									"        console.log(\"❌ Login failed with status code:\", pm.response.code);\r",
+									"        pm.test(\"Login should return 200 OK\", function() {\r",
+									"            pm.expect.fail(\"Unexpected status code: \" + pm.response.code);\r",
+									"        });\r",
+									"    }\r",
+									"} else {\r",
+									"    console.log(\"❌ No response received\");\r",
+									"    pm.test(\"Should receive response from server\", function() {\r",
+									"        pm.expect.fail(\"No response received from server\");\r",
+									"    });\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"authToken\", \"\");\r",
+									"console.log(\"authToken variable cleared.\");"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"testLoginUser\",\n  \"password\": \"password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{bookManagementUrl}}/api/Auth/login",
+							"host": [
+								"{{bookManagementUrl}}"
+							],
+							"path": [
+								"api",
+								"Auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Log the current token used\r",
+									"console.log(\"Logging out with token:\", pm.collectionVariables.get(\"authToken\"));\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// if (pm.response.code === 200 || pm.response.code === 204) {\r",
+									"//     console.log(\"✅ Logout successful!\");\r",
+									"// } else {\r",
+									"//     console.log(\"❌ Logout may have failed. Status code:\", pm.response.code);\r",
+									"// }\r",
+									"\r",
+									"// ตรวจสอบว่า token ถูกใช้ในการเรียก API\r",
+									"const authToken = pm.collectionVariables.get(\"authToken\");\r",
+									"console.log(\"Using token for logout:\", authToken ? \"Token present\" : \"Token missing\");\r",
+									"\r",
+									"// ตรวจสอบการตอบสนอง\r",
+									"if (pm.response && pm.response.code) {\r",
+									"    if (pm.response.code === 200 || pm.response.code === 204) {\r",
+									"        console.log(\"✅ Logout successful!\");\r",
+									"        pm.test(\"Logout successful\", function() {\r",
+									"            pm.expect(pm.response.code).to.be.oneOf([200, 204]);\r",
+									"        });\r",
+									"        \r",
+									"        // เมื่อออกจากระบบสำเร็จ ล้างค่า token\r",
+									"        pm.collectionVariables.set(\"authToken\", \"\");\r",
+									"        console.log(\"Token cleared after successful logout\");\r",
+									"    } else if (pm.response.code === 401) {\r",
+									"        console.log(\"❌ Logout failed: Unauthorized - Token may be invalid or expired\");\r",
+									"        pm.test(\"Token should be valid for logout\", function() {\r",
+									"            pm.expect.fail(\"Unauthorized: Token may be invalid or expired\");\r",
+									"        });\r",
+									"    } else {\r",
+									"        console.log(\"❌ Logout failed with status code:\", pm.response.code);\r",
+									"        pm.test(\"Logout should return 200/204\", function() {\r",
+									"            pm.expect.fail(\"Unexpected status code: \" + pm.response.code);\r",
+									"        });\r",
+									"    }\r",
+									"    \r",
+									"    // ตรวจสอบเนื้อหาการตอบกลับ (ถ้ามี)\r",
+									"    try {\r",
+									"        if (pm.response.text() && pm.response.text().length > 0) {\r",
+									"            var responseBody = pm.response.json();\r",
+									"            console.log(\"Response body:\", responseBody);\r",
+									"            \r",
+									"            pm.test(\"Response format is correct\", function() {\r",
+									"                pm.expect(responseBody).to.be.an('object');\r",
+									"                // เพิ่มการตรวจสอบตามโครงสร้าง response ของคุณ\r",
+									"                // เช่น pm.expect(responseBody.success).to.be.true;\r",
+									"            });\r",
+									"        }\r",
+									"    } catch (e) {\r",
+									"        // ไม่มีปัญหาถ้า response ไม่มี body หรือไม่ใช่ JSON\r",
+									"        console.log(\"Note: No JSON body in response or empty response\");\r",
+									"    }\r",
+									"} else {\r",
+									"    console.log(\"❌ No response received for logout request\");\r",
+									"    pm.test(\"Should receive response from server\", function() {\r",
+									"        pm.expect.fail(\"No response received from server\");\r",
+									"    });\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{bookManagementUrl}}/api/Auth/logout",
+							"host": [
+								"{{bookManagementUrl}}"
+							],
+							"path": [
+								"api",
+								"Auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove test login user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200 || pm.response.code === 204) {\r",
+									"    console.log(\"✅ Remove user successful!\");\r",
+									"} else {\r",
+									"    console.log(\"❌ Remove user failed. Status code:\", pm.response.code);\r",
+									"}\r",
+									"\r",
+									"pm.test(\"Token is received\", function() {\r",
+									"    pm.expect(responseJson.token).to.exist;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{bookManagementUrl}}/api/User/remove-test-user",
+							"host": [
+								"{{bookManagementUrl}}"
+							],
+							"path": [
+								"api",
+								"User",
+								"remove-test-user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "authToken",
+			"value": ""
+		},
+		{
+			"key": "maxID",
+			"value": ""
+		},
+		{
+			"key": "categoryId",
+			"value": ""
+		},
+		{
+			"key": "maxUserID",
+			"value": ""
+		},
+		{
+			"key": "maxCategoryID",
+			"value": ""
+		},
+		{
+			"key": "maxBookID",
+			"value": ""
+		}
+	]
+}
